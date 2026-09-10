@@ -39,6 +39,9 @@ dependencies {
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui)
     implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.identity.credentials)
+    implementation(libs.androidx.credentials.play.auth)
+    implementation(libs.google.identity.lib)
     
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)

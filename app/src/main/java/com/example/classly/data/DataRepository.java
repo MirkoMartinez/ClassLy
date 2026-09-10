@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// Esta clase usa el patrón Singleton: solo existe una instancia en toda la app para centralizar los datos
 public class DataRepository {
     private static DataRepository instance;
     private final List<ClassInfo> classes;
@@ -14,9 +15,11 @@ public class DataRepository {
         classes = new ArrayList<>();
         exams = new ArrayList<>();
         subjects = new ArrayList<>();
+        // Cargamos unos datos de ejemplo al iniciar para que la app no se vea vacía
         initDummyData();
     }
 
+    // Método para obtener la única instancia del repositorio desde cualquier parte del código
     public static synchronized DataRepository getInstance() {
         if (instance == null) {
             instance = new DataRepository();
@@ -38,10 +41,10 @@ public class DataRepository {
         exams.add(new ExamInfo("Matemáticas II", "22 Sep", "Parcial", "Integrales Multiples", 12));
         exams.add(new ExamInfo("Programación", "30 Sep", "Final", "Estructuras de Datos", 20));
 
-        subjects.add(new SubjectInfo("Matemáticas II", 5, 80, 8.5));
-        subjects.add(new SubjectInfo("Física I", 4, 64, 7.2));
-        subjects.add(new SubjectInfo("Programación", 6, 96, 9.0));
-        subjects.add(new SubjectInfo("Sistemas", 4, 64, 8.0));
+        subjects.add(new SubjectInfo("Matemáticas II", 5, 80, 8.5, true, 8.0));
+        subjects.add(new SubjectInfo("Física I", 4, 64, 7.2, false, 0.0));
+        subjects.add(new SubjectInfo("Programación", 6, 96, 9.0, true, 7.0));
+        subjects.add(new SubjectInfo("Sistemas", 4, 64, 8.0, false, 0.0));
     }
 
     public List<ClassInfo> getClassesByDay(int dayIndex) {

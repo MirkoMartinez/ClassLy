@@ -38,39 +38,61 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
         binding.fabAddSubject.setOnClickListener(v -> showAddSubjectDialog(null));
     }
 
+    // Este es el método más complejo: muestra el formulario para añadir o editar una materia
     private void showAddSubjectDialog(@Nullable SubjectInfo subjectToEdit) {
         DialogAddSubjectBinding dialogBinding = DialogAddSubjectBinding.inflate(getLayoutInflater());
 
+        // Si estamos editando, rellenamos los campos con la info que ya teníamos
         if (subjectToEdit != null) {
             dialogBinding.etName.setText(subjectToEdit.getName());
             dialogBinding.etCredits.setText(String.valueOf(subjectToEdit.getCredits()));
             dialogBinding.etHours.setText(String.valueOf(subjectToEdit.getHours()));
             dialogBinding.etGrade.setText(String.valueOf(subjectToEdit.getAverageGrade()));
+            dialogBinding.switchPromotional.setChecked(subjectToEdit.isPromotional());
+            if (subjectToEdit.isPromotional()) {
+                dialogBinding.layoutPromotionGrade.setVisibility(View.VISIBLE);
+                dialogBinding.etPromotionGrade.setText(String.valueOf(subjectToEdit.getPromotionGrade()));
+            }
         }
 
+        // Hacemos que el campo de "nota necesaria" aparezca o desaparezca según el switch
+        dialogBinding.switchPromotional.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            dialogBinding.layoutPromotionGrade.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+        });
+
+        // Construimos el cuadro de diálogo de Material Design
         new AlertDialog.Builder(requireContext())
                 .setTitle(subjectToEdit == null ? "Añadir Asignatura" : "Editar Asignatura")
                 .setView(dialogBinding.getRoot())
                 .setPositiveButton(subjectToEdit == null ? "Añadir" : "Guardar", (dialog, which) -> {
+                    // Recolectamos todo lo que el usuario escribió
                     String name = dialogBinding.etName.getText().toString();
                     String creditsStr = dialogBinding.etCredits.getText().toString();
                     String hoursStr = dialogBinding.etHours.getText().toString();
                     String gradeStr = dialogBinding.etGrade.getText().toString();
+                    boolean isPromotional = dialogBinding.switchPromotional.isChecked();
+                    String promotionGradeStr = dialogBinding.etPromotionGrade.getText().toString();
 
                     int credits = creditsStr.isEmpty() ? 0 : Integer.parseInt(creditsStr);
                     int hours = hoursStr.isEmpty() ? 0 : Integer.parseInt(hoursStr);
                     double grade = gradeStr.isEmpty() ? 0.0 : Double.parseDouble(gradeStr);
+                    double promotionGrade = (isPromotional && !promotionGradeStr.isEmpty()) ? Double.parseDouble(promotionGradeStr) : 0.0;
 
                     if (!name.isEmpty()) {
                         if (subjectToEdit == null) {
-                            DataRepository.getInstance().addSubject(new SubjectInfo(name, credits, hours, grade));
+                            // Si es nueva, la mandamos al repositorio
+                            DataRepository.getInstance().addSubject(new SubjectInfo(name, credits, hours, grade, isPromotional, promotionGrade));
                         } else {
+                            // Si ya existía, actualizamos sus datos actuales
                             subjectToEdit.setName(name);
                             subjectToEdit.setCredits(credits);
                             subjectToEdit.setHours(hours);
                             subjectToEdit.setAverageGrade(grade);
+                            subjectToEdit.setPromotional(isPromotional);
+                            subjectToEdit.setPromotionGrade(promotionGrade);
                             DataRepository.getInstance().updateSubject(subjectToEdit);
                         }
+                        // Refrescamos la lista para que se vean los cambios al instante
                         adapter.updateData(DataRepository.getInstance().getSubjects());
                     }
                 })

@@ -8,13 +8,17 @@ public class SubjectInfo {
     private int credits;
     private int hours;
     private double averageGrade;
+    private boolean isPromotional;
+    private double promotionGrade;
 
-    public SubjectInfo(String name, int credits, int hours, double averageGrade) {
+    public SubjectInfo(String name, int credits, int hours, double averageGrade, boolean isPromotional, double promotionGrade) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.credits = credits;
         this.hours = hours;
         this.averageGrade = averageGrade;
+        this.isPromotional = isPromotional;
+        this.promotionGrade = promotionGrade;
     }
 
     public String getId() { return id; }
@@ -26,4 +30,8 @@ public class SubjectInfo {
     public void setHours(int hours) { this.hours = hours; }
     public double getAverageGrade() { return averageGrade; }
     public void setAverageGrade(double averageGrade) { this.averageGrade = averageGrade; }
+    public boolean isPromotional() { return isPromotional; }
+    public void setPromotional(boolean promotional) { isPromotional = promotional; }
+    public double getPromotionGrade() { return promotionGrade; }
+    public void setPromotionGrade(double promotionGrade) { this.promotionGrade = promotionGrade; }
 }

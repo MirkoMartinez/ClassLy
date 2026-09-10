@@ -41,6 +41,21 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
         holder.binding.tvDetails.setText("Créditos: " + item.getCredits() + " | Horas: " + item.getHours());
         holder.binding.tvGrade.setText(String.valueOf(item.getAverageGrade()));
 
+        if (item.isPromotional()) {
+            holder.binding.tvPromoStatus.setVisibility(android.view.View.VISIBLE);
+            if (item.getAverageGrade() >= item.getPromotionGrade()) {
+                holder.binding.tvPromoStatus.setText("PROMOCIONANDO");
+                holder.binding.tvPromoStatus.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
+                        holder.itemView.getContext().getResources().getColor(android.R.color.holo_green_dark)));
+            } else {
+                holder.binding.tvPromoStatus.setText("A FINAL");
+                holder.binding.tvPromoStatus.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
+                        holder.itemView.getContext().getResources().getColor(android.R.color.holo_orange_dark)));
+            }
+        } else {
+            holder.binding.tvPromoStatus.setVisibility(android.view.View.GONE);
+        }
+
         holder.binding.btnEdit.setOnClickListener(v -> {
             if (listener != null) listener.onEdit(item);
         });
