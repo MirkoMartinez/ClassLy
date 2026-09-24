@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bienvenido a ClassLy"
+        android:text="@string/welcome_classly"
         android:textColor="?attr/colorPrimary"
         android:textSize="32sp"
         android:textStyle="bold" />
@@ -19,14 +19,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Inicia sesión para continuar"
+        android:text="@string/login_to_continue"
         android:textSize="16sp" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:hint="Correo electrónico"
+        android:hint="@string/hint_email"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -40,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Contraseña"
+        android:hint="@string/hint_password"
         app:passwordToggleEnabled="true"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
@@ -56,7 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Iniciar Sesión" />
+        android:text="@string/btn_login" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnGoogle"
@@ -64,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Iniciar con Google" />
+        android:text="@string/btn_google" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnNavigateRegister"
@@ -72,6 +72,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="¿No tienes cuenta? Regístrate aquí" />
+        android:text="@string/btn_navigate_register" />
 
 </LinearLayout>

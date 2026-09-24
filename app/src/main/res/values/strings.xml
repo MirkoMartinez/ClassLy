@@ -1,4 +1,116 @@
 <resources>
     <string name="app_name">ClassLy</string>
     <string name="google_client_id">1048302760600-hajac5pf1193sncjk4eumv150sme1c0d.apps.googleusercontent.com</string>
+
+    <!-- Layout Strings -->
+    <string name="hint_subject">Asignatura</string>
+    <string name="hint_time_format">Horario (ej. 10:00 - 12:00)</string>
+    <string name="hint_room">Aula</string>
+    <string name="hint_professor">Profesor</string>
+    <string name="label_day_of_week">Día de la semana</string>
+
+    <string name="hint_date_format">Fecha (ej. 15 Sep)</string>
+    <string name="hint_type_format">Tipo (ej. Parcial, Final)</string>
+    <string name="hint_topic">Tema</string>
+    <string name="hint_days_remaining">Días restantes</string>
+
+    <string name="hint_subject_name">Nombre de la asignatura</string>
+    <string name="hint_credits">Créditos</string>
+    <string name="hint_total_hours">Horas totales</string>
+    <string name="hint_initial_grade">Nota media inicial</string>
+    <string name="label_is_promotional">¿Es promocional?</string>
+    <string name="hint_promotion_grade">Nota necesaria para promocionar</string>
+    <string name="hint_partials_count">Cantidad de parciales</string>
+    <string name="hint_exam_grade">Nota obtenida (opcional)</string>
+    <string name="adapter_exam_grade">Nota: %1$s</string>
+    <string name="adapter_exam_pending">Nota: Pendiente</string>
+
+    <string name="title_exams">Exámenes</string>
+    <string name="welcome_student">¡Hola, estudiante!</string>
+    <string name="next_class">Próxima Clase</string>
+    <string name="dummy_math">Matemáticas II</string>
+    <string name="dummy_time">10:00 - 12:00</string>
+    <string name="dummy_room">Aula 302</string>
+    <string name="nearest_exam_label">Examen Cercano</string>
+    <string name="dummy_physics">Física I (Parcial)</string>
+    <string name="dummy_days">Faltan 5 días</string>
+
+    <string name="welcome_classly">Bienvenido a ClassLy</string>
+    <string name="login_to_continue">Inicia sesión para continuar</string>
+    <string name="hint_email">Correo electrónico</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="btn_login">Iniciar Sesión</string>
+    <string name="btn_google">Iniciar con Google</string>
+    <string name="btn_navigate_register">¿No tienes cuenta? Regístrate aquí</string>
+
+    <string name="create_account">Crea tu cuenta</string>
+    <string name="hint_name">Nombre</string>
+    <string name="hint_surname">Apellido</string>
+    <string name="btn_register">Registrarse</string>
+    <string name="btn_navigate_login">¿Ya tienes cuenta? Inicia sesión</string>
+
+    <string name="title_my_subjects">Mis Asignaturas</string>
+    <string name="desc_edit">Editar</string>
+    <string name="desc_delete">Eliminar</string>
+    <string name="label_average">Promedio</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_schedule">Horario</string>
+    <string name="menu_exams">Exámenes</string>
+    <string name="menu_subjects">Materias</string>
+
+    <!-- Java/Worker/Notification Strings -->
+    <string name="notification_channel_name">Recordatorios de Exámenes</string>
+    <string name="notification_channel_desc">Notificaciones para avisar sobre próximos exámenes</string>
+    <string name="default_exam_name">Examen</string>
+    <string name="notification_title">¡Prepárate para tu examen!</string>
+    <string name="notification_content">Tu examen de %1$s es pronto. ¡No olvides estudiar!</string>
+
+    <!-- Adapter Strings -->
+    <string name="adapter_date">Fecha: %1$s</string>
+    <string name="adapter_topic">Tema: %1$s</string>
+    <string name="adapter_days_remaining">Faltan %1$d días</string>
+    <string name="adapter_professor">Prof: %1$s</string>
+    <string name="adapter_subject_details">Horas: %1$d</string>
+    <string name="status_promoting">PROMOCIONANDO</string>
+    <string name="status_to_final">A FINAL</string>
+
+    <!-- Fragment Action Strings -->
+    <string name="dialog_add_exam">Añadir Examen</string>
+    <string name="dialog_edit_exam">Editar Examen</string>
+    <string name="action_add">Añadir</string>
+    <string name="action_save">Guardar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="dialog_delete_exam_title">Eliminar Examen</string>
+    <string name="dialog_delete_exam_msg">¿Estás seguro de que quieres eliminar este examen?</string>
+    <string name="action_delete">Eliminar</string>
+
+    <string name="toast_empty_fields">Por favor, completa todos los campos</string>
+    <string name="toast_google_error">Error al iniciar sesión con Google</string>
+    <string name="toast_welcome">Bienvenido, %1$s</string>
+
+    <string name="dialog_add_class">Añadir Clase</string>
+    <string name="dialog_edit_class">Editar Clase</string>
+    <string name="dialog_delete_class_title">Eliminar Clase</string>
+    <string name="dialog_delete_class_msg">¿Estás seguro de que quieres eliminar esta clase?</string>
+
+    <string name="dialog_add_subject">Añadir Asignatura</string>
+    <string name="dialog_edit_subject">Editar Asignatura</string>
+    <string name="dialog_delete_subject_title">Eliminar Asignatura</string>
+    <string name="dialog_delete_subject_msg">¿Estás seguro de que quieres eliminar esta asignatura?</string>
+
+    <!-- Days of the week -->
+    <string name="day_monday">Lunes</string>
+    <string name="day_tuesday">Martes</string>
+    <string name="day_wednesday">Miércoles</string>
+    <string name="day_thursday">Jueves</string>
+    <string name="day_friday">Viernes</string>
+
+    <string name="day_short_mon">L</string>
+    <string name="day_short_tue">M</string>
+    <string name="day_short_wed">Mi</string>
+    <string name="day_short_thu">J</string>
+    <string name="day_short_fri">V</string>
+    <string name="menu_calendar">Calendario</string>
+    <string name="no_exams_selected_date">No hay exámenes para la fecha seleccionada</string>
 </resources>

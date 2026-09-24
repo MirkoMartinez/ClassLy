@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Crea tu cuenta"
+            android:text="@string/create_account"
             android:textColor="?attr/colorPrimary"
             android:textSize="32sp"
             android:textStyle="bold" />
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:hint="Nombre"
+            android:hint="@string/hint_name"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Apellido"
+            android:hint="@string/hint_surname"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Correo electrónico"
+            android:hint="@string/hint_email"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -65,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Contraseña"
+            android:hint="@string/hint_password"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -80,7 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Registrarse" />
+            android:text="@string/btn_register" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnNavigateLogin"
@@ -88,7 +88,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="¿Ya tienes cuenta? Inicia sesión" />
+            android:text="@string/btn_navigate_login" />
 
     </LinearLayout>
 </ScrollView>

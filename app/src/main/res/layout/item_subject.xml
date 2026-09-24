@@ -54,7 +54,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Editar"
+                    android:contentDescription="@string/desc_edit"
                     android:src="@drawable/ic_edit"
                     android:scaleType="centerInside" />
 
@@ -63,7 +63,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Eliminar"
+                    android:contentDescription="@string/desc_delete"
                     android:src="@drawable/ic_delete"
                     android:scaleType="centerInside" />
             </LinearLayout>
@@ -80,7 +80,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Promedio"
+                android:text="@string/label_average"
                 android:textAppearance="?attr/textAppearanceLabelSmall" />
 
             <TextView

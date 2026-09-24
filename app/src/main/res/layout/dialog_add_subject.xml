@@ -8,7 +8,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre de la asignatura">
+        android:hint="@string/hint_subject_name">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etName"
@@ -20,20 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="Créditos">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etCredits"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="Horas totales">
+        android:hint="@string/hint_total_hours">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etHours"
@@ -46,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="Nota media inicial">
+        android:hint="@string/hint_initial_grade">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etGrade"
@@ -55,19 +42,33 @@
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/hint_partials_count">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPartialsCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:text="2" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.materialswitch.MaterialSwitch
         android:id="@+id/switchPromotional"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="¿Es promocional?" />
+        android:text="@string/label_is_promotional" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutPromotionGrade"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="Nota necesaria para promocionar"
+        android:hint="@string/hint_promotion_grade"
         android:visibility="gone">
 
         <com.google.android.material.textfield.TextInputEditText

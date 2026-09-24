@@ -8,7 +8,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Asignatura">
+        android:hint="@string/hint_subject">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etSubject"
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="Horario (ej. 10:00 - 12:00)">
+        android:hint="@string/hint_time_format">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etTime"
@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="Aula">
+        android:hint="@string/hint_room">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etRoom"
@@ -44,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="Profesor">
+        android:hint="@string/hint_professor">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etProfessor"
@@ -56,7 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Día de la semana"
+        android:text="@string/label_day_of_week"
         android:textAppearance="?attr/textAppearanceLabelLarge" />
 
     <Spinner
