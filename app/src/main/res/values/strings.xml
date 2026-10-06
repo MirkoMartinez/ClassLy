@@ -113,4 +113,13 @@
     <string name="day_short_fri">V</string>
     <string name="menu_calendar">Calendario</string>
     <string name="no_exams_selected_date">No hay exámenes para la fecha seleccionada</string>
+    <string name="dialog_add_assignment">Añadir Trabajo Práctico</string>
+    <string name="dialog_edit_assignment">Editar Trabajo Práctico</string>
+    <string name="hint_assignment_title">Título del TP (ej. TP 1)</string>
+    <string name="hint_assignment_desc">Descripción o consigna</string>
+    <string name="label_submitted">Entregado</string>
+    <string name="dialog_delete_assignment_title">Eliminar Trabajo Práctico</string>
+    <string name="dialog_delete_assignment_msg">¿Estás seguro de que quieres eliminar este trabajo práctico?</string>
+    <string name="no_assignments_selected_date">No hay entregas para la fecha seleccionada</string>
+    <string name="btn_add_assignment">Nuevo TP</string>
 </resources>

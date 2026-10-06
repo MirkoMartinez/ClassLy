@@ -1,0 +1,7 @@
+- `[x]` Crear modelo `AssignmentInfo.java`
+- `[x]` Actualizar `DataRepository.java` para gestionar TPs
+- `[x]` Añadir recursos de cadenas en `strings.xml`
+- `[x]` Crear layout `dialog_add_assignment.xml` y `item_assignment.xml`
+- `[x]` Crear `AssignmentsAdapter.java`
+- `[x]` Actualizar `CalendarFragment.java` y `fragment_calendar.xml` para mostrar y agregar TPs y exámenes con múltiples decoradores
+- `[x]` Verificar compilación y funcionamiento general
