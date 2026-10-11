@@ -1,13 +1,10 @@
 package com.example.classly.data.models;
 
-import java.util.UUID;
-
 /**
- * Representa la información detallada de una asignatura o materia cursada,
- * incluyendo su carga horaria, promedio de calificaciones y estado/criterio de promoción.
+ * Representa la información detallada de una asignatura o materia cursada.
+ * Hereda de BaseEntity aplicando los principios de POO (Herencia y Encapsulamiento).
  */
-public class SubjectInfo {
-    private String id;
+public class SubjectInfo extends BaseEntity {
     private String name;
     private int hours;
     private double averageGrade;
@@ -15,30 +12,18 @@ public class SubjectInfo {
     private double promotionGrade;
     private int partialsCount;
 
-    /**
-     * Constructor para inicializar una nueva asignatura.
-     *
-     * @param name           Nombre de la materia.
-     * @param hours          Carga horaria total de la materia.
-     * @param averageGrade   Calificación promedio actual.
-     * @param isPromotional  Indica si la materia es promocionable (sin examen final).
-     * @param promotionGrade Nota mínima requerida para lograr la promoción.
-     */
     public SubjectInfo(String name, int hours, double averageGrade, boolean isPromotional, double promotionGrade) {
-        this.id = UUID.randomUUID().toString();
+        super();
         this.name = name;
         this.hours = hours;
         this.averageGrade = averageGrade;
         this.isPromotional = isPromotional;
         this.promotionGrade = promotionGrade;
-        this.partialsCount = 2; // Valor por defecto
+        this.partialsCount = 2;
     }
 
-    /**
-     * Constructor completo incluyendo la cantidad de parciales.
-     */
     public SubjectInfo(String name, int hours, double averageGrade, boolean isPromotional, double promotionGrade, int partialsCount) {
-        this.id = UUID.randomUUID().toString();
+        super();
         this.name = name;
         this.hours = hours;
         this.averageGrade = averageGrade;
@@ -47,9 +32,6 @@ public class SubjectInfo {
         this.partialsCount = partialsCount;
     }
 
-    // --- Getters y Setters ---
-
-    public String getId() { return id; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public int getHours() { return hours; }

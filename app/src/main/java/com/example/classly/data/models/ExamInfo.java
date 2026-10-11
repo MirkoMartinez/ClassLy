@@ -1,31 +1,22 @@
 package com.example.classly.data.models;
 
+import android.annotation.SuppressLint;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.UUID;
 
 /**
  * Representa la información de un examen, parcial o evaluación académica.
- * Incluye la materia, la fecha programada, el tipo de evaluación y el tema o unidad.
+ * Hereda de BaseEntity aplicando los principios de POO (Herencia y Encapsulamiento).
  */
-public class ExamInfo {
-    private String id;
+public class ExamInfo extends BaseEntity {
     private String subject;
-    private String date; // Formato esperado: YYYY-MM-DD
-    private String type; // Ej: Parcial, Final, Práctica, etc.
+    private String date;
+    private String type;
     private String topic;
-    private Double grade; // Nota obtenida, null si aún no está calificado
+    private Double grade;
 
-    /**
-     * Constructor para inicializar una nueva evaluación con un ID único.
-     *
-     * @param subject Materia asociada al examen.
-     * @param date    Fecha del examen en formato YYYY-MM-DD.
-     * @param type    Tipo de evaluación (Parcial, Final, etc.).
-     * @param topic   Temas específicos a evaluar.
-     */
     public ExamInfo(String subject, String date, String type, String topic) {
-        this.id = UUID.randomUUID().toString();
+        super();
         this.subject = subject;
         this.date = date;
         this.type = type;
@@ -33,11 +24,8 @@ public class ExamInfo {
         this.grade = null;
     }
 
-    /**
-     * Constructor completo incluyendo la calificación obtenida.
-     */
     public ExamInfo(String subject, String date, String type, String topic, Double grade) {
-        this.id = UUID.randomUUID().toString();
+        super();
         this.subject = subject;
         this.date = date;
         this.type = type;
@@ -45,9 +33,6 @@ public class ExamInfo {
         this.grade = grade;
     }
 
-    // --- Getters y Setters ---
-
-    public String getId() { return id; }
     public String getSubject() { return subject; }
     public void setSubject(String subject) { this.subject = subject; }
     public String getDate() { return date; }
@@ -59,11 +44,7 @@ public class ExamInfo {
     public Double getGrade() { return grade; }
     public void setGrade(Double grade) { this.grade = grade; }
 
-    /**
-     * Calcula los días restantes desde la fecha actual hasta la fecha del examen.
-     *
-     * @return Número de días restantes (0 o positivo si es en el futuro).
-     */
+    @SuppressLint("NewApi")
     public int getDaysRemaining() {
         try {
             LocalDate examDate = LocalDate.parse(this.date);

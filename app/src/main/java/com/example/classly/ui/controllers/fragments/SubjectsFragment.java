@@ -7,25 +7,28 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.appcompat.app.AlertDialog;
 import com.example.classly.R;
-import com.example.classly.data.repository.DataRepository;
 import com.example.classly.data.models.SubjectInfo;
 import com.example.classly.ui.adapters.SubjectsAdapter;
 import com.example.classly.databinding.FragmentSubjectsBinding;
 import com.example.classly.databinding.DialogAddSubjectBinding;
+import com.example.classly.ui.viewmodels.SubjectsViewModel;
 import java.util.ArrayList;
 
 /**
  * Fragmento que gestiona la lista de asignaturas y materias del estudiante.
  * Permite agregar nuevas materias especificando carga horaria, promedio y condiciones de promoción,
  * así como editarlas o eliminarlas.
+ * Utiliza SubjectsViewModel para separar la lógica de negocio y gestionar el estado reactivo.
  */
 public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubjectActionListener {
 
     private FragmentSubjectsBinding binding;
     private SubjectsAdapter adapter;
+    private SubjectsViewModel viewModel;
 
     @Nullable
     @Override
@@ -38,13 +41,31 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Inicializar ViewModel
+        viewModel = new ViewModelProvider(this).get(SubjectsViewModel.class);
+
         // Configurar RecyclerView y adaptador de materias
         binding.rvSubjects.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new SubjectsAdapter(new ArrayList<>(DataRepository.getInstance().getSubjects()), this);
+        adapter = new SubjectsAdapter(new ArrayList<>(), this);
         binding.rvSubjects.setAdapter(adapter);
+
+        // Observar LiveData de asignaturas de forma reactiva
+        viewModel.getSubjects().observe(getViewLifecycleOwner(), subjects -> {
+            adapter.updateData(subjects);
+        });
 
         // Botón flotante para añadir materia
         binding.fabAddSubject.setOnClickListener(v -> showAddSubjectDialog(null));
+
+        viewModel.loadSubjects();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (viewModel != null) {
+            viewModel.loadSubjects();
+        }
     }
 
     /**
@@ -91,7 +112,7 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
 
                     if (!name.isEmpty()) {
                         if (subjectToEdit == null) {
-                            DataRepository.getInstance().addSubject(new SubjectInfo(name, hours, grade, isPromotional, promotionGrade, partialsCount));
+                            viewModel.addSubject(new SubjectInfo(name, hours, grade, isPromotional, promotionGrade, partialsCount));
                         } else {
                             subjectToEdit.setName(name);
                             subjectToEdit.setHours(hours);
@@ -99,9 +120,8 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
                             subjectToEdit.setPartialsCount(partialsCount);
                             subjectToEdit.setPromotional(isPromotional);
                             subjectToEdit.setPromotionGrade(promotionGrade);
-                            DataRepository.getInstance().updateSubject(subjectToEdit);
+                            viewModel.updateSubject(subjectToEdit);
                         }
-                        adapter.updateData(DataRepository.getInstance().getSubjects());
                     }
                 })
                 .setNegativeButton(getString(R.string.action_cancel), null)
@@ -119,8 +139,7 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
                 .setTitle(getString(R.string.dialog_delete_subject_title))
                 .setMessage(getString(R.string.dialog_delete_subject_msg))
                 .setPositiveButton(getString(R.string.action_delete), (dialog, which) -> {
-                    DataRepository.getInstance().deleteSubject(subjectInfo.getId());
-                    adapter.updateData(DataRepository.getInstance().getSubjects());
+                    viewModel.deleteSubject(subjectInfo.getId());
                 })
                 .setNegativeButton(getString(R.string.action_cancel), null)
                 .show();

@@ -1,31 +1,24 @@
-# Walkthrough - Apartado de Trabajos Prácticos (TPs) y Calendario
+# Walkthrough - Requisitos de la Segunda Entrega (50%)
 
-Se ha implementado con éxito la funcionalidad completa para gestionar y recordar entregas de trabajos prácticos (TPs) y su integración en el calendario de la aplicación **ClassLy**.
+Se han implementado y robustecido rigurosamente todos los requerimientos solicitados para la segunda entrega del proyecto **ClassLy**, enfocados en la arquitectura, asincronismo, resiliencia y depuración.
 
 ## Cambios Realizados
 
-### 1. Modelo de Datos
-#### [AssignmentInfo.java](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/java/com/example/classly/data/models/AssignmentInfo.java)
-- Nuevo modelo para almacenar información de los TPs (materia, fecha de vencimiento, título, descripción, estado de entrega y nota).
+### 1. Arquitectura Limpia y POO (Herencia y Encapsulamiento)
+#### [BaseEntity.java](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/java/com/example/classly/data/models/BaseEntity.java)
+- Clase base abstracta de la cual heredan todas las entidades de datos (`ClassInfo`, `ExamInfo`, `SubjectInfo`, `AssignmentInfo`), aplicando herencia y encapsulamiento estricto.
 
-#### [DataRepository.java](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/java/com/example/classly/data/repository/DataRepository.java)
-- Se añadió la lista de TPs, datos de ejemplo iniciales y métodos CRUD completos (`getAssignments`, `addAssignment`, `updateAssignment`, `deleteAssignment`).
+### 2. Asincronismo y Gestión de Hilos (`ExecutorService`)
+#### [BaseViewModel.java](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/java/com/example/classly/ui/viewmodels/BaseViewModel.java)
+- ViewModel base abstracto que provee un pool de hilos (`ExecutorService` con 4 hilos concurrentes) para delegar todas las operaciones pesadas y consultas de datos a **hilos secundarios (Background Threads)**, protegiendo sagradamente el hilo principal (*Main Thread*).
 
-### 2. Interfaz y Adaptadores
-#### [strings.xml](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/res/values/strings.xml)
-- Nuevos recursos de texto y etiquetas para la gestión de TPs.
+### 3. Resiliencia y Máquina de Estados (`UiState` & `try/catch`)
+#### [UiState.java](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/java/com/example/classly/ui/viewmodels/UiState.java)
+- Máquina de estados en `enum` (`LOADING`, `SUCCESS`, `ERROR`) gestionada en los ViewModels para el control de flujos de carga en la UI.
+- Todos los ViewModels y el `DataRepository` incorporan bloques `try/catch` estrictos en tiempo de ejecución para evitar cualquier cierre abrupto o excepción no controlada.
 
-#### [dialog_add_assignment.xml](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/res/layout/dialog_add_assignment.xml) & [item_assignment.xml](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/res/layout/item_assignment.xml)
-- Layouts para el formulario de adición/edición y para las tarjetas de visualización en RecyclerView con indicador de estado (entregado/pendiente) y calificación.
-
-#### [AssignmentsAdapter.java](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/java/com/example/classly/ui/adapters/AssignmentsAdapter.java)
-- Adaptador RecyclerView para renderizar la lista de TPs con alertas visuales de vencimiento próximo.
-
-### 3. Integración en el Calendario
-#### [fragment_calendar.xml](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/res/layout/fragment_calendar.xml) & [CalendarFragment.java](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/java/com/example/classly/ui/controllers/fragments/CalendarFragment.java)
-- Se actualizó el calendario para mostrar **múltiples decoradores de colores** (puntos rojos para exámenes y puntos azules para entregas de TPs).
-- Se muestran secciones separadas para exámenes y TPs según el día seleccionado.
-- Se añadió un botón flotante ("Agregar TP") para registrar nuevas entregas directamente desde la vista del calendario.
+### 4. Auditoría y Depuración Profesional (`Logcat`)
+- Se incorporaron trazas de depuración estructuradas con `Log.d`, `Log.i` y `Log.e` utilizando un tag consistente (`"ClassLyDebug"`) en todos los repositorios y viewmodels para el seguimiento lógico de ejecución.
 
 ## Resultados de Validación
 

@@ -1,7 +1,6 @@
-- `[x]` Crear modelo `AssignmentInfo.java`
-- `[x]` Actualizar `DataRepository.java` para gestionar TPs
-- `[x]` Añadir recursos de cadenas en `strings.xml`
-- `[x]` Crear layout `dialog_add_assignment.xml` y `item_assignment.xml`
-- `[x]` Crear `AssignmentsAdapter.java`
-- `[x]` Actualizar `CalendarFragment.java` y `fragment_calendar.xml` para mostrar y agregar TPs y exámenes con múltiples decoradores
-- `[x]` Verificar compilación y funcionamiento general
+- `[x]` Crear clase abstracta `BaseEntity.java` (POO: Herencia)
+- `[x]` Crear `UiState.java` (Enum de máquina de estados)
+- `[x]` Crear clase base `BaseViewModel.java` con `ExecutorService` y manejo de `UiState`
+- `[x]` Actualizar ViewModels (`ScheduleViewModel`, `ExamsViewModel`, `SubjectsViewModel`, `AssignmentsViewModel`) para usar hilos secundarios (`ExecutorService`) y `UiState`
+- `[x]` Incorporar manejo robusto de excepciones (`try/catch`) y logging profesional con `Logcat` (`ClassLyDebug`) en repositorios y viewmodels
+- `[x]` Verificar compilación exitosa mediante Gradle build (`app:assembleDebug`)

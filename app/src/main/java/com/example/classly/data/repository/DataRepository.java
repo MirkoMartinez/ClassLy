@@ -1,5 +1,6 @@
 package com.example.classly.data.repository;
 
+import android.util.Log;
 import com.example.classly.data.models.AssignmentInfo;
 import com.example.classly.data.models.ClassInfo;
 import com.example.classly.data.models.ExamInfo;
@@ -11,32 +12,29 @@ import java.util.stream.Collectors;
 /**
  * Repositorio central de datos que implementa el patrón Singleton.
  * Gestiona en memoria las listas de clases del horario, exámenes y asignaturas,
- * proporcionando métodos CRUD para interactuar con los fragmentos y adaptadores.
+ * incorporando manejo robusto de excepciones (try/catch) y auditoría con Logcat.
  */
 public class DataRepository {
+    private static final String TAG = "ClassLyDebug";
     private static DataRepository instance;
     private final List<ClassInfo> classes;
     private final List<ExamInfo> exams;
     private final List<SubjectInfo> subjects;
     private final List<AssignmentInfo> assignments;
 
-    /**
-     * Constructor privado del repositorio. Inicializa las listas y carga datos de prueba iniciales.
-     */
     private DataRepository() {
         classes = new ArrayList<>();
         exams = new ArrayList<>();
         subjects = new ArrayList<>();
         assignments = new ArrayList<>();
-        // Cargamos datos de ejemplo al iniciar para asegurar que la app tenga contenido demostrativo funcional
-        initDummyData();
+        try {
+            initDummyData();
+            Log.i(TAG, "DataRepository: Datos iniciales cargados correctamente.");
+        } catch (Exception e) {
+            Log.e(TAG, "DataRepository: Error al inicializar datos dummy", e);
+        }
     }
 
-    /**
-     * Obtiene la única instancia compartida del repositorio (Singleton thread-safe).
-     *
-     * @return Instancia de DataRepository.
-     */
     public static synchronized DataRepository getInstance() {
         if (instance == null) {
             instance = new DataRepository();
@@ -44,9 +42,6 @@ public class DataRepository {
         return instance;
     }
 
-    /**
-     * Inicializa datos ficticios (dummy data) para clases, exámenes y materias.
-     */
     private void initDummyData() {
         classes.add(new ClassInfo("Matemáticas II", "08:00 - 10:00", "Aula 302", "Dr. García", 0));
         classes.add(new ClassInfo("Programación", "10:00 - 12:00", "Lab 1", "Ing. Pérez", 0));
@@ -70,110 +65,169 @@ public class DataRepository {
         assignments.add(new AssignmentInfo("Física I", "2026-10-05", "Informe de Laboratorio", "Práctica de péndulo"));
     }
 
-    /**
-     * Filtra y retorna la lista de clases correspondientes a un día específico de la semana.
-     *
-     * @param dayIndex Índice del día (0 = Lunes, 4 = Viernes, etc.).
-     * @return Lista de objetos ClassInfo para dicho día.
-     */
     public List<ClassInfo> getClassesByDay(int dayIndex) {
-        return classes.stream()
-                .filter(c -> c.getDayIndex() == dayIndex)
-                .collect(Collectors.toList());
+        try {
+            return classes.stream()
+                    .filter(c -> c.getDayIndex() == dayIndex)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            Log.e(TAG, "DataRepository: Error al filtrar clases por día", e);
+            return new ArrayList<>();
+        }
     }
 
-    /** Agrega una nueva clase al repositorio. */
     public void addClass(ClassInfo classInfo) {
-        classes.add(classInfo);
+        try {
+            classes.add(classInfo);
+            Log.d(TAG, "DataRepository: Clase añadida -> " + classInfo.getSubject());
+        } catch (Exception e) {
+            Log.e(TAG, "DataRepository: Error al añadir clase", e);
+        }
     }
 
-    /** Actualiza una clase existente buscando por su ID único. */
     public void updateClass(ClassInfo updatedClass) {
-        for (int i = 0; i < classes.size(); i++) {
-            if (classes.get(i).getId().equals(updatedClass.getId())) {
-                classes.set(i, updatedClass);
-                return;
+        try {
+            for (int i = 0; i < classes.size(); i++) {
+                if (classes.get(i).getId().equals(updatedClass.getId())) {
+                    classes.set(i, updatedClass);
+                    Log.d(TAG, "DataRepository: Clase actualizada -> " + updatedClass.getSubject());
+                    return;
+                }
             }
+        } catch (Exception e) {
+            Log.e(TAG, "DataRepository: Error al actualizar clase", e);
         }
     }
 
-    /** Elimina una clase por su ID. */
     public void deleteClass(String id) {
-        classes.removeIf(c -> c.getId().equals(id));
+        try {
+            classes.removeIf(c -> c.getId().equals(id));
+            Log.d(TAG, "DataRepository: Clase eliminada ID -> " + id);
+        } catch (Exception e) {
+            Log.e(TAG, "DataRepository: Error al eliminar clase", e);
+        }
     }
 
-    /** Retorna una copia de la lista completa de exámenes. */
     public List<ExamInfo> getExams() {
-        return new ArrayList<>(exams);
+        try {
+            return new ArrayList<>(exams);
+        } catch (Exception e) {
+            Log.e(TAG, "DataRepository: Error al obtener exámenes", e);
+            return new ArrayList<>();
+        }
     }
 
-    /** Agrega un nuevo examen. */
     public void addExam(ExamInfo examInfo) {
-        exams.add(examInfo);
+        try {
+            exams.add(examInfo);
+            Log.d(TAG, "DataRepository: Examen añadido -> " + examInfo.getSubject());
+        } catch (Exception e) {
+            Log.e(TAG, "DataRepository: Error al añadir examen", e);
+        }
     }
 
-    /** Actualiza un examen existente por ID. */
     public void updateExam(ExamInfo updatedExam) {
-        for (int i = 0; i < exams.size(); i++) {
-            if (exams.get(i).getId().equals(updatedExam.getId())) {
-                exams.set(i, updatedExam);
-                return;
+        try {
+            for (int i = 0; i < exams.size(); i++) {
+                if (exams.get(i).getId().equals(updatedExam.getId())) {
+                    exams.set(i, updatedExam);
+                    Log.d(TAG, "DataRepository: Examen actualizado -> " + updatedExam.getSubject());
+                    return;
+                }
             }
+        } catch (Exception e) {
+            Log.e(TAG, "DataRepository: Error al actualizar examen", e);
         }
     }
 
-    /** Elimina un examen por su ID. */
     public void deleteExam(String id) {
-        exams.removeIf(e -> e.getId().equals(id));
+        try {
+            exams.removeIf(e -> e.getId().equals(id));
+            Log.d(TAG, "DataRepository: Examen eliminado ID -> " + id);
+        } catch (Exception e) {
+            Log.e(TAG, "DataRepository: Error al eliminar examen", e);
+        }
     }
 
-    /** Retorna una copia de la lista de asignaturas. */
     public List<SubjectInfo> getSubjects() {
-        return new ArrayList<>(subjects);
+        try {
+            return new ArrayList<>(subjects);
+        } catch (Exception e) {
+            Log.e(TAG, "DataRepository: Error al obtener asignaturas", e);
+            return new ArrayList<>();
+        }
     }
 
-    /** Agrega una nueva asignatura. */
     public void addSubject(SubjectInfo subjectInfo) {
-        subjects.add(subjectInfo);
+        try {
+            subjects.add(subjectInfo);
+            Log.d(TAG, "DataRepository: Asignatura añadida -> " + subjectInfo.getName());
+        } catch (Exception e) {
+            Log.e(TAG, "DataRepository: Error al añadir asignatura", e);
+        }
     }
 
-    /** Actualiza una asignatura existente por ID. */
     public void updateSubject(SubjectInfo updatedSubject) {
-        for (int i = 0; i < subjects.size(); i++) {
-            if (subjects.get(i).getId().equals(updatedSubject.getId())) {
-                subjects.set(i, updatedSubject);
-                return;
+        try {
+            for (int i = 0; i < subjects.size(); i++) {
+                if (subjects.get(i).getId().equals(updatedSubject.getId())) {
+                    subjects.set(i, updatedSubject);
+                    Log.d(TAG, "DataRepository: Asignatura actualizada -> " + updatedSubject.getName());
+                    return;
+                }
             }
+        } catch (Exception e) {
+            Log.e(TAG, "DataRepository: Error al actualizar asignatura", e);
         }
     }
 
-    /** Elimina una asignatura por su ID. */
     public void deleteSubject(String id) {
-        subjects.removeIf(s -> s.getId().equals(id));
-    }
-
-    /** Retorna una copia de la lista de trabajos prácticos. */
-    public List<AssignmentInfo> getAssignments() {
-        return new ArrayList<>(assignments);
-    }
-
-    /** Agrega un nuevo trabajo práctico. */
-    public void addAssignment(AssignmentInfo assignmentInfo) {
-        assignments.add(assignmentInfo);
-    }
-
-    /** Actualiza un trabajo práctico existente. */
-    public void updateAssignment(AssignmentInfo updatedAssignment) {
-        for (int i = 0; i < assignments.size(); i++) {
-            if (assignments.get(i).getId().equals(updatedAssignment.getId())) {
-                assignments.set(i, updatedAssignment);
-                return;
-            }
+        try {
+            subjects.removeIf(s -> s.getId().equals(id));
+            Log.d(TAG, "DataRepository: Asignatura eliminada ID -> " + id);
+        } catch (Exception e) {
+            Log.e(TAG, "DataRepository: Error al eliminar asignatura", e);
         }
     }
 
-    /** Elimina un trabajo práctico por ID. */
+    public List<AssignmentInfo> getAssignments() {
+        try {
+            return new ArrayList<>(assignments);
+        } catch (Exception e) {
+            Log.e(TAG, "DataRepository: Error al obtener TPs", e);
+            return new ArrayList<>();
+        }
+    }
+
+    public void addAssignment(AssignmentInfo assignmentInfo) {
+        try {
+            assignments.add(assignmentInfo);
+            Log.d(TAG, "DataRepository: TP añadido -> " + assignmentInfo.getTitle());
+        } catch (Exception e) {
+            Log.e(TAG, "DataRepository: Error al añadir TP", e);
+        }
+    }
+
+    public void updateAssignment(AssignmentInfo updatedAssignment) {
+        try {
+            for (int i = 0; i < assignments.size(); i++) {
+                if (assignments.get(i).getId().equals(updatedAssignment.getId())) {
+                    assignments.set(i, updatedAssignment);
+                    Log.d(TAG, "DataRepository: TP actualizado -> " + updatedAssignment.getTitle());
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "DataRepository: Error al actualizar TP", e);
+        }
+    }
+
     public void deleteAssignment(String id) {
-        assignments.removeIf(a -> a.getId().equals(id));
+        try {
+            assignments.removeIf(a -> a.getId().equals(id));
+            Log.d(TAG, "DataRepository: TP eliminado ID -> " + id);
+        } catch (Exception e) {
+            Log.e(TAG, "DataRepository: Error al eliminar TP", e);
+        }
     }
 }

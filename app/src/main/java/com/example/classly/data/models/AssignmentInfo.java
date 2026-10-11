@@ -3,31 +3,21 @@ package com.example.classly.data.models;
 import android.annotation.SuppressLint;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.UUID;
 
 /**
- * Representa un trabajo práctico o tarea pendiente de entrega para una materia,
- * incluyendo su fecha de vencimiento, título, descripción, estado de entrega y nota.
+ * Representa un trabajo práctico o tarea pendiente de entrega para una materia.
+ * Hereda de BaseEntity aplicando los principios de POO (Herencia y Encapsulamiento).
  */
-public class AssignmentInfo {
-    private String id;
+public class AssignmentInfo extends BaseEntity {
     private String subject;
-    private String date; // Formato YYYY-MM-DD
+    private String date;
     private String title;
     private String description;
     private boolean isSubmitted;
     private Double grade;
 
-    /**
-     * Constructor para inicializar un nuevo trabajo práctico.
-     *
-     * @param subject     Materia asociada.
-     * @param date        Fecha de vencimiento (YYYY-MM-DD).
-     * @param title       Título del trabajo práctico.
-     * @param description Descripción o consignas.
-     */
     public AssignmentInfo(String subject, String date, String title, String description) {
-        this.id = UUID.randomUUID().toString();
+        super();
         this.subject = subject;
         this.date = date;
         this.title = title;
@@ -36,9 +26,6 @@ public class AssignmentInfo {
         this.grade = null;
     }
 
-    // --- Getters y Setters ---
-
-    public String getId() { return id; }
     public String getSubject() { return subject; }
     public void setSubject(String subject) { this.subject = subject; }
     public String getDate() { return date; }
@@ -52,9 +39,6 @@ public class AssignmentInfo {
     public Double getGrade() { return grade; }
     public void setGrade(Double grade) { this.grade = grade; }
 
-    /**
-     * Calcula los días restantes hasta la fecha de vencimiento.
-     */
     @SuppressLint("NewApi")
     public int getDaysRemaining() {
         try {

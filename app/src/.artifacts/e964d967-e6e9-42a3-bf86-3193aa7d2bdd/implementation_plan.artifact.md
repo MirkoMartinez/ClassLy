@@ -1,43 +1,49 @@
-# Plan de Implementación: Apartado de Trabajos Prácticos (TPs)
+# Plan de Implementación: Requisitos para la Segunda Entrega (50%)
 
-Permitir al usuario gestionar y recordar las entregas de trabajos prácticos de cada materia, con fecha de vencimiento, título, descripción, estado de entrega (pendiente/entregado) y calificación opcional, integrándolos visualmente en el calendario de la app.
+Adaptar y robustecer el proyecto **ClassLy** para cumplir estrictamente con los **4 requerimientos obligatorios** indicados en la rúbrica de la segunda entrega:
+1. **Arquitectura Limpia y POO:** Herencia, polimorfismo y encapsulamiento.
+2. **Asincronismo y Gestión de Hilos:** Uso de `ExecutorService` (Java) para proteger el hilo principal (*Main Thread*).
+3. **Resiliencia y Feedback Visual:** Máquina de estados (`enum UiState`), `ProgressBar` y bloques `try/catch`.
+4. **Auditoría y Depuración:** Logging profesional con `Logcat`.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> **Integración en el Calendario:** El calendario mostrará puntos indicadores de colores (por ejemplo, rojo para exámenes y azul para fechas de entrega de TPs) y al seleccionar cualquier día se listarán tanto los exámenes como los TPs que venzan en esa fecha.
+> **Modificaciones técnicas exactas:**
+> - **POO:** Creación de `BaseEntity` (clase abstracta de la que heredan `ClassInfo`, `ExamInfo`, `SubjectInfo`, `AssignmentInfo`) y `BaseViewModel`.
+> - **Hilos (`ExecutorService`):** Invocación de operaciones de datos en segundo plano mediante `ExecutorService`.
+> - **Feedback Visual (`enum UiState`):** Implementación de estados (`LOADING`, `SUCCESS`, `ERROR`) con `ProgressBar` en pantallas y manejo estricto de excepciones `try/catch`.
+> - **Logcat:** Trazas de auditoría con `Log.d`, `Log.i`, `Log.e` bajo el tag `"ClassLyDebug"`.
 
 ## Proposed Changes
 
-### 1. Modelo de Datos
-#### [NEW] [AssignmentInfo.java](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/java/com/example/classly/data/models/AssignmentInfo.java)
-- Crear el modelo con ID, materia, fecha de vencimiento, título, descripción, estado de entrega (`isSubmitted`) y nota opcional (`grade`).
+### 1. Arquitectura Limpia y POO
+#### [NEW] [BaseEntity.java](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/java/com/example/classly/data/models/BaseEntity.java)
+- Clase base abstracta demostrando herencia y encapsulamiento para los modelos.
 
+#### [NEW] [BaseViewModel.java](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/java/com/example/classly/ui/viewmodels/BaseViewModel.java)
+- ViewModel base que gestiona el `ExecutorService` compartido y el estado `UiState`.
+
+### 2. Resiliencia y Máquina de Estados
+#### [NEW] [UiState.java](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/java/com/example/classly/ui/viewmodels/UiState.java)
+- Enum con estados `LOADING`, `SUCCESS`, `ERROR`.
+
+### 3. Asincronismo y Auditoría en Repositorios y ViewModels
 #### [MODIFY] [DataRepository.java](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/java/com/example/classly/data/repository/DataRepository.java)
-- Añadir lista de trabajos prácticos (`assignments`), datos de ejemplo y métodos CRUD (`getAssignments`, `addAssignment`, `updateAssignment`, `deleteAssignment`).
+- Incorporar bloques `try/catch` y `Logcat` profesional en todas las operaciones.
 
-### 2. Interfaz de Usuario y Adaptadores
-#### [NEW] [dialog_add_assignment.xml](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/res/layout/dialog_add_assignment.xml)
-- Diálogo para crear/editar un trabajo práctico (materia, título, fecha con DatePicker, descripción y nota).
+#### [MODIFY] [ScheduleViewModel.java](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/java/com/example/classly/ui/viewmodels/ScheduleViewModel.java), [ExamsViewModel.java](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/java/com/example/classly/ui/viewmodels/ExamsViewModel.java), [SubjectsViewModel.java](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/java/com/example/classly/ui/viewmodels/SubjectsViewModel.java)
+- Heredar de `BaseViewModel`, ejecutar consultas mediante `ExecutorService` y emitir `UiState`.
 
-#### [NEW] [item_assignment.xml](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/res/layout/item_assignment.xml)
-- Tarjeta RecyclerView con checkbox para marcar entregado/pendiente, título, materia, fecha y nota.
-
-#### [NEW] [AssignmentsAdapter.java](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/java/com/example/classly/ui/adapters/AssignmentsAdapter.java)
-- Adaptador para la lista de TPs con soporte para acciones de editar, eliminar y cambiar estado de entrega.
-
-### 3. Integración en Calendario
-#### [MODIFY] [fragment_calendar.xml](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/res/layout/fragment_calendar.xml)
-- Ajustar la interfaz del calendario para soportar la visualización y un botón flotante o menú para agregar nuevos TPs.
-
-#### [MODIFY] [CalendarFragment.java](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/java/com/example/classly/ui/controllers/fragments/CalendarFragment.java)
-- Actualizar los decoradores del calendario para mostrar puntos de colores para exámenes y TPs, filtrar ambos elementos por la fecha seleccionada y gestionar la creación/edición de TPs.
+### 4. Feedback Visual en Vistas
+#### [MODIFY] [fragment_schedule.xml](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/res/layout/fragment_schedule.xml), [fragment_exams.xml](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/res/layout/fragment_exams.xml), [fragment_subjects.xml](file:///C:/Users/MirkoM/AndroidStudioProjects/ClassLy/app/src/main/res/layout/fragment_subjects.xml)
+- Añadir `ProgressBar` para mostrar estado de carga.
 
 ## Verification Plan
 
 ### Automated Tests
-- Compilación limpia del proyecto mediante Gradle (`app:assembleDebug`).
+- Compilación limpia mediante Gradle (`app:assembleDebug`).
 
 ### Manual Verification
-- Abrir la sección de Calendario, verificar los puntos indicadores en las fechas con TPs y exámenes.
-- Añadir un nuevo Trabajo Práctico, marcarlo como entregado y comprobar su persistencia en el repositorio.
+- Comprobar en Logcat (`ClassLyDebug`) los rastros de ejecución, hilos y captura de errores.
+- Verificar que las barras de progreso (`ProgressBar`) reflejen los estados de carga.

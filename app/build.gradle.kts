@@ -54,6 +54,8 @@ dependencies {
     implementation(libs.google.identity.lib)
     // Google ML Kit Text Recognition para OCR de PDFs escaneados
     implementation("com.google.mlkit:text-recognition:16.0.1")
+    // Google Generative AI SDK para análisis multimodal con Gemini
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
     
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
