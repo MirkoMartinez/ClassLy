@@ -8,7 +8,6 @@ Esta guía está diseñada para que cualquier desarrollador o estudiante pueda c
 
 **ClassLy** es una aplicación móvil nativa para Android desarrollada en **Java** utilizando el ecosistema moderno de Android Jetpack y Material 3. Está diseñada específicamente para estudiantes universitarios y terciarios, resolviendo la necesidad de organizar la vida académica en un solo lugar:
 - Gestión de horarios de clases semanales.
-- **Importación automática de horarios desde PDF (con fotos escaneadas y OCR local)**.
 - Gestión de exámenes parciales/finales, cálculo de días restantes y registro de calificaciones.
 - Seguimiento de entregas de **Trabajos Prácticos (TPs)** con estado de entrega (pendiente/entregado).
 - Control de asignaturas, carga horaria, promedio de calificaciones y estado de promoción.
