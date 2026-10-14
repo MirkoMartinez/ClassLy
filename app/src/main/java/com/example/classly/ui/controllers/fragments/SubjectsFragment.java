@@ -54,6 +54,13 @@ public class SubjectsFragment extends Fragment implements SubjectsAdapter.OnSubj
             adapter.updateData(subjects);
         });
 
+        // Observar máquina de estados (UiState) para el ProgressBar
+        viewModel.getUiState().observe(getViewLifecycleOwner(), state -> {
+            if (binding != null) {
+                binding.progressBar.setVisibility(state == com.example.classly.ui.viewmodels.UiState.LOADING ? View.VISIBLE : View.GONE);
+            }
+        });
+
         // Botón flotante para añadir materia
         binding.fabAddSubject.setOnClickListener(v -> showAddSubjectDialog(null));
 

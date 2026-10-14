@@ -56,6 +56,13 @@ public class ExamsFragment extends Fragment implements ExamsAdapter.OnExamAction
             adapter.updateData(exams);
         });
 
+        // Observar máquina de estados (UiState) para el ProgressBar
+        viewModel.getUiState().observe(getViewLifecycleOwner(), state -> {
+            if (binding != null) {
+                binding.progressBar.setVisibility(state == com.example.classly.ui.viewmodels.UiState.LOADING ? View.VISIBLE : View.GONE);
+            }
+        });
+
         // Botón flotante para añadir un nuevo examen
         binding.fabAddExam.setOnClickListener(v -> showAddExamDialog(null));
 

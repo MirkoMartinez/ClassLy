@@ -57,6 +57,13 @@ public class ScheduleFragment extends Fragment implements ScheduleAdapter.OnClas
             adapter.updateData(classes);
         });
 
+        // Observar máquina de estados (UiState) para mostrar/ocultar ProgressBar
+        viewModel.getUiState().observe(getViewLifecycleOwner(), state -> {
+            if (binding != null) {
+                binding.progressBar.setVisibility(state == com.example.classly.ui.viewmodels.UiState.LOADING ? View.VISIBLE : View.GONE);
+            }
+        });
+
         // Configurar pestañas (TabLayout) para los días de la semana (Lunes a Viernes)
         List<String> days = Arrays.asList(
                 getString(R.string.day_short_mon),
