@@ -44,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
         NotificationHelper.createNotificationChannel(this);
         checkNotificationPermission();
 
+        // Inicializar base de datos local con Room (ORM & SQLite)
+        com.example.classly.data.repository.DataRepository.init(this);
+
         // Mostrar inicialmente el fragmento de inicio de sesión (Login)
         showFragment(new LoginFragment(), false);
 

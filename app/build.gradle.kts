@@ -57,6 +57,14 @@ dependencies {
     // Google Generative AI SDK para análisis multimodal con Gemini
     implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
     
+    // Room Database (ORM & SQLite)
+    implementation("androidx.room:room-runtime:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
+
+    // Retrofit & Gson Converter (REST API)
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)

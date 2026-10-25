@@ -1,6 +1,7 @@
-- `[x]` Crear clase abstracta `BaseEntity.java` (POO: Herencia)
-- `[x]` Crear `UiState.java` (Enum de máquina de estados)
-- `[x]` Crear clase base `BaseViewModel.java` con `ExecutorService` y manejo de `UiState`
-- `[x]` Actualizar ViewModels (`ScheduleViewModel`, `ExamsViewModel`, `SubjectsViewModel`, `AssignmentsViewModel`) para usar hilos secundarios (`ExecutorService`) y `UiState`
-- `[x]` Incorporar manejo robusto de excepciones (`try/catch`) y logging profesional con `Logcat` (`ClassLyDebug`) en repositorios y viewmodels
+- `[x]` Añadir dependencias de Room y Retrofit en `app/build.gradle.kts`
+- `[x]` Crear `UserPreferencesHelper.java` (SharedPreferences)
+- `[x]` Crear Entidades y DAOs de Room y `AppDatabase.java`
+- `[x]` Actualizar `DataRepository.java` para utilizar Room DAOs con `ExecutorService`
+- `[x]` Crear `ApiService.java` y `RetrofitClient.java` (Retrofit & REST API)
+- `[x]` Crear `NetworkUtils.java` (Gestión de Conectividad)
 - `[x]` Verificar compilación exitosa mediante Gradle build (`app:assembleDebug`)
