@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.appcompat.app.AlertDialog;
 import com.example.classly.R;
@@ -18,6 +20,7 @@ import com.example.classly.databinding.DialogAddAssignmentBinding;
 import com.example.classly.databinding.DialogAddExamBinding;
 import com.example.classly.ui.adapters.AssignmentsAdapter;
 import com.example.classly.ui.adapters.ExamsAdapter;
+import com.example.classly.ui.viewmodels.CalendarViewModel;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
@@ -29,18 +32,18 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 /**
  * Fragmento que muestra un calendario interactivo (MaterialCalendarView)
- * para visualizar exámenes y trabajos prácticos programados por fecha,
- * permitiendo filtrarlos, agregarlos, editarlos o eliminarlos.
+ * para visualizar exámenes y trabajos prácticos programados por fecha.
+ * Utiliza CalendarViewModel para separar la lógica de negocio y asincronismo (MVVM estricta).
  */
 public class CalendarFragment extends Fragment implements ExamsAdapter.OnExamActionListener, AssignmentsAdapter.OnAssignmentActionListener {
 
     private FragmentCalendarBinding binding;
     private ExamsAdapter examsAdapter;
     private AssignmentsAdapter assignmentsAdapter;
+    private CalendarViewModel viewModel;
     private String selectedDateStr;
 
     @Nullable
@@ -54,6 +57,9 @@ public class CalendarFragment extends Fragment implements ExamsAdapter.OnExamAct
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Inicializar ViewModel
+        viewModel = new ViewModelProvider(this).get(CalendarViewModel.class);
+
         // Configurar RecyclerViews para exámenes y TPs
         binding.rvCalendarExams.setLayoutManager(new LinearLayoutManager(getContext()));
         examsAdapter = new ExamsAdapter(new ArrayList<>(), this);
@@ -63,26 +69,40 @@ public class CalendarFragment extends Fragment implements ExamsAdapter.OnExamAct
         assignmentsAdapter = new AssignmentsAdapter(new ArrayList<>(), this);
         binding.rvCalendarAssignments.setAdapter(assignmentsAdapter);
 
+        // Observar datos de forma reactiva
+        viewModel.getExamsForDate().observe(getViewLifecycleOwner(), exams -> {
+            examsAdapter.updateData(exams);
+            updateVisibility();
+        });
+
+        viewModel.getAssignmentsForDate().observe(getViewLifecycleOwner(), assignments -> {
+            assignmentsAdapter.updateData(assignments);
+            updateVisibility();
+        });
+
+        viewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMsg -> {
+            if (errorMsg != null && getContext() != null) {
+                Toast.makeText(getContext(), "Error: " + errorMsg, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         // Seleccionar la fecha actual por defecto en el calendario
         binding.calendarView.setSelectedDate(CalendarDay.today());
         CalendarDay today = CalendarDay.today();
         updateSelectedDate(today.getYear(), today.getMonth() - 1, today.getDay());
 
-        // Listener cuando el usuario cambia de fecha en el calendario
         binding.calendarView.setOnDateChangedListener((widget, date, selected) -> {
             updateSelectedDate(date.getYear(), date.getMonth() - 1, date.getDay());
         });
 
-        // Botón flotante para agregar un nuevo trabajo práctico
         binding.fabAddAssignment.setOnClickListener(v -> showAddAssignmentDialog(null));
 
-        // Resaltar días con exámenes y TPs en el calendario
         highlightEventDays();
     }
 
     private void updateSelectedDate(int year, int month, int dayOfMonth) {
         selectedDateStr = String.format(Locale.US, "%04d-%02d-%02d", year, month + 1, dayOfMonth);
-        refreshEvents();
+        viewModel.loadEventsForDate(selectedDateStr);
     }
 
     private void highlightEventDays() {
@@ -112,27 +132,14 @@ public class CalendarFragment extends Fragment implements ExamsAdapter.OnExamAct
             }
         }
 
-        // Rojo para exámenes, Azul para TPs
         binding.calendarView.addDecorator(new EventDayDecorator(android.graphics.Color.RED, examDays));
         binding.calendarView.addDecorator(new EventDayDecorator(android.graphics.Color.BLUE, assignmentDays));
     }
 
-    private void refreshEvents() {
+    private void updateVisibility() {
         if (binding == null) return;
-
-        List<ExamInfo> filteredExams = DataRepository.getInstance().getExams().stream()
-                .filter(exam -> selectedDateStr.equals(exam.getDate()))
-                .collect(Collectors.toList());
-
-        List<AssignmentInfo> filteredAssignments = DataRepository.getInstance().getAssignments().stream()
-                .filter(a -> selectedDateStr.equals(a.getDate()))
-                .collect(Collectors.toList());
-
-        examsAdapter.updateData(filteredExams);
-        assignmentsAdapter.updateData(filteredAssignments);
-
-        boolean hasExams = !filteredExams.isEmpty();
-        boolean hasAssignments = !filteredAssignments.isEmpty();
+        boolean hasExams = examsAdapter.getItemCount() > 0;
+        boolean hasAssignments = assignmentsAdapter.getItemCount() > 0;
 
         binding.tvExamsHeader.setVisibility(hasExams ? View.VISIBLE : View.GONE);
         binding.rvCalendarExams.setVisibility(hasExams ? View.VISIBLE : View.GONE);
@@ -165,45 +172,45 @@ public class CalendarFragment extends Fragment implements ExamsAdapter.OnExamAct
 
         dialogBinding.etDate.setOnClickListener(v -> {
             Calendar calendar = Calendar.getInstance();
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
-
             new android.app.DatePickerDialog(requireContext(), (view1, y, m, d) -> {
                 String formattedDate = String.format(Locale.US, "%04d-%02d-%02d", y, m + 1, d);
                 dialogBinding.etDate.setText(formattedDate);
-            }, year, month, day).show();
+            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
         });
 
         new AlertDialog.Builder(requireContext())
                 .setTitle(assignmentToEdit == null ? getString(R.string.dialog_add_assignment) : getString(R.string.dialog_edit_assignment))
                 .setView(dialogBinding.getRoot())
                 .setPositiveButton(assignmentToEdit == null ? getString(R.string.action_add) : getString(R.string.action_save), (dialog, which) -> {
-                    String subject = dialogBinding.etSubject.getText().toString();
-                    String title = dialogBinding.etTitle.getText().toString();
-                    String date = dialogBinding.etDate.getText().toString();
-                    String description = dialogBinding.etDescription.getText().toString();
-                    boolean isSubmitted = dialogBinding.cbSubmitted.isChecked();
-                    String gradeStr = dialogBinding.etGrade.getText().toString();
-                    Double grade = gradeStr.isEmpty() ? null : Double.parseDouble(gradeStr);
+                    try {
+                        String subject = dialogBinding.etSubject.getText().toString();
+                        String title = dialogBinding.etTitle.getText().toString();
+                        String date = dialogBinding.etDate.getText().toString();
+                        String description = dialogBinding.etDescription.getText().toString();
+                        boolean isSubmitted = dialogBinding.cbSubmitted.isChecked();
+                        String gradeStr = dialogBinding.etGrade.getText().toString();
+                        Double grade = gradeStr.isEmpty() ? null : Double.parseDouble(gradeStr);
 
-                    if (!subject.isEmpty() && !title.isEmpty()) {
-                        if (assignmentToEdit == null) {
-                            AssignmentInfo newAssignment = new AssignmentInfo(subject, date, title, description);
-                            newAssignment.setSubmitted(isSubmitted);
-                            newAssignment.setGrade(grade);
-                            DataRepository.getInstance().addAssignment(newAssignment);
-                        } else {
-                            assignmentToEdit.setSubject(subject);
-                            assignmentToEdit.setTitle(title);
-                            assignmentToEdit.setDate(date);
-                            assignmentToEdit.setDescription(description);
-                            assignmentToEdit.setSubmitted(isSubmitted);
-                            assignmentToEdit.setGrade(grade);
-                            DataRepository.getInstance().updateAssignment(assignmentToEdit);
+                        if (!subject.isEmpty() && !title.isEmpty()) {
+                            if (assignmentToEdit == null) {
+                                AssignmentInfo newAssignment = new AssignmentInfo(subject, date, title, description);
+                                newAssignment.setSubmitted(isSubmitted);
+                                newAssignment.setGrade(grade);
+                                DataRepository.getInstance().addAssignment(newAssignment);
+                            } else {
+                                assignmentToEdit.setSubject(subject);
+                                assignmentToEdit.setTitle(title);
+                                assignmentToEdit.setDate(date);
+                                assignmentToEdit.setDescription(description);
+                                assignmentToEdit.setSubmitted(isSubmitted);
+                                assignmentToEdit.setGrade(grade);
+                                DataRepository.getInstance().updateAssignment(assignmentToEdit);
+                            }
+                            highlightEventDays();
+                            viewModel.loadEventsForDate(selectedDateStr);
                         }
-                        highlightEventDays();
-                        refreshEvents();
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(requireContext(), "Formato numérico inválido en la nota", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton(getString(R.string.action_cancel), null)
@@ -233,22 +240,26 @@ public class CalendarFragment extends Fragment implements ExamsAdapter.OnExamAct
                 .setTitle("Editar Examen")
                 .setView(dialogBinding.getRoot())
                 .setPositiveButton("Guardar", (dialog, which) -> {
-                    String subject = dialogBinding.etSubject.getText().toString();
-                    String date = dialogBinding.etDate.getText().toString();
-                    String type = dialogBinding.etType.getText().toString();
-                    String topic = dialogBinding.etTopic.getText().toString();
-                    String gradeStr = dialogBinding.etGrade.getText().toString();
-                    Double grade = gradeStr.isEmpty() ? null : Double.parseDouble(gradeStr);
+                    try {
+                        String subject = dialogBinding.etSubject.getText().toString();
+                        String date = dialogBinding.etDate.getText().toString();
+                        String type = dialogBinding.etType.getText().toString();
+                        String topic = dialogBinding.etTopic.getText().toString();
+                        String gradeStr = dialogBinding.etGrade.getText().toString();
+                        Double grade = gradeStr.isEmpty() ? null : Double.parseDouble(gradeStr);
 
-                    if (!subject.isEmpty()) {
-                        examInfo.setSubject(subject);
-                        examInfo.setDate(date);
-                        examInfo.setType(type);
-                        examInfo.setTopic(topic);
-                        examInfo.setGrade(grade);
-                        DataRepository.getInstance().updateExam(examInfo);
-                        highlightEventDays();
-                        refreshEvents();
+                        if (!subject.isEmpty()) {
+                            examInfo.setSubject(subject);
+                            examInfo.setDate(date);
+                            examInfo.setType(type);
+                            examInfo.setTopic(topic);
+                            examInfo.setGrade(grade);
+                            DataRepository.getInstance().updateExam(examInfo);
+                            highlightEventDays();
+                            viewModel.loadEventsForDate(selectedDateStr);
+                        }
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(requireContext(), "Formato numérico inválido en la nota", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancelar", null)
@@ -261,9 +272,8 @@ public class CalendarFragment extends Fragment implements ExamsAdapter.OnExamAct
                 .setTitle("Eliminar Examen")
                 .setMessage("¿Estás seguro de que quieres eliminar este examen?")
                 .setPositiveButton("Eliminar", (dialog, which) -> {
-                    DataRepository.getInstance().deleteExam(examInfo.getId());
+                    viewModel.deleteExam(examInfo.getId(), selectedDateStr);
                     highlightEventDays();
-                    refreshEvents();
                 })
                 .setNegativeButton("Cancelar", null)
                 .show();
@@ -280,11 +290,10 @@ public class CalendarFragment extends Fragment implements ExamsAdapter.OnExamAct
                 .setTitle(getString(R.string.dialog_delete_assignment_title))
                 .setMessage(getString(R.string.dialog_delete_assignment_msg))
                 .setPositiveButton(getString(R.string.action_delete), (dialog, which) -> {
-                    DataRepository.getInstance().deleteAssignment(assignmentInfo.getId());
+                    viewModel.deleteAssignment(assignmentInfo.getId(), selectedDateStr);
                     highlightEventDays();
-                    refreshEvents();
                 })
-                .setNegativeButton(getString(R.string.action_cancel), null)
+                .setNegativeButton("Cancelar", null)
                 .show();
     }
 

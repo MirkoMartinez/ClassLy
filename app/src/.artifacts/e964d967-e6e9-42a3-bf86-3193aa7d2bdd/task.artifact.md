@@ -1,7 +1,6 @@
-- `[x]` Añadir dependencias de Room y Retrofit en `app/build.gradle.kts`
-- `[x]` Crear `UserPreferencesHelper.java` (SharedPreferences)
-- `[x]` Crear Entidades y DAOs de Room y `AppDatabase.java`
-- `[x]` Actualizar `DataRepository.java` para utilizar Room DAOs con `ExecutorService`
-- `[x]` Crear `ApiService.java` y `RetrofitClient.java` (Retrofit & REST API)
-- `[x]` Crear `NetworkUtils.java` (Gestión de Conectividad)
+- `[x]` Crear `HomeViewModel.java` y `CalendarViewModel.java`
+- `[x]` Refactorizar `HomeFragment.java` y `CalendarFragment.java` para usar ViewModels e hilos secundarios
+- `[x]` Observar `errorMessageLiveData` en todos los fragmentos principales (Schedule, Exams, Subjects, Home, Calendar)
+- `[x]` Aplicar validaciones defensivas contra `NumberFormatException` en diálogos de entrada numérica
+- `[x]` Mejorar validaciones en `LoginFragment.java` y `RegisterFragment.java` (Patterns.EMAIL_ADDRESS y password length)
 - `[x]` Verificar compilación exitosa mediante Gradle build (`app:assembleDebug`)

@@ -28,8 +28,8 @@ import java.util.concurrent.Executors;
 
 /**
  * Fragmento de inicio de sesión (Login).
- * Permite autenticarse mediante correo y contraseña o a través de Google Sign-In con Credential Manager API,
- * y facilita la navegación hacia la pantalla de registro.
+ * Permite autenticarse mediante correo y contraseña (con validación estricta de formato y seguridad)
+ * o a través de Google Sign-In con Credential Manager API.
  */
 public class LoginFragment extends Fragment {
 
@@ -52,13 +52,17 @@ public class LoginFragment extends Fragment {
             ((MainActivity) getActivity()).setBottomNavVisibility(false);
         }
 
-        // Botón de inicio de sesión con correo y contraseña
+        // Botón de inicio de sesión con correo y contraseña con validaciones estrictas
         binding.btnLogin.setOnClickListener(v -> {
             String email = (binding.etEmail.getText() != null) ? binding.etEmail.getText().toString().trim() : "";
             String password = (binding.etPassword.getText() != null) ? binding.etPassword.getText().toString().trim() : "";
 
             if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
                 Toast.makeText(getContext(), getString(R.string.toast_empty_fields), Toast.LENGTH_SHORT).show();
+            } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                Toast.makeText(getContext(), "Formato de correo electrónico inválido", Toast.LENGTH_SHORT).show();
+            } else if (password.length() < 6) {
+                Toast.makeText(getContext(), "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show();
             } else {
                 ((MainActivity) requireActivity()).navigateToMain();
             }

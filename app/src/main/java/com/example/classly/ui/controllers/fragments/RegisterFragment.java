@@ -15,8 +15,8 @@ import com.example.classly.databinding.FragmentRegisterBinding;
 
 /**
  * Fragmento de registro de nuevos usuarios en la aplicación.
- * Valida los campos obligatorios (nombre, apellido, correo, contraseña) y permite
- * regresar a la pantalla de inicio de sesión.
+ * Valida los campos obligatorios con validación estricta (Patterns.EMAIL_ADDRESS y seguridad de contraseña)
+ * y permite regresar a la pantalla de inicio de sesión.
  */
 public class RegisterFragment extends Fragment {
 
@@ -33,7 +33,7 @@ public class RegisterFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Validación y registro de usuario
+        // Validación estricta y registro de usuario
         binding.btnRegister.setOnClickListener(v -> {
             String name = (binding.etName.getText() != null) ? binding.etName.getText().toString().trim() : "";
             String surname = (binding.etSurname.getText() != null) ? binding.etSurname.getText().toString().trim() : "";
@@ -43,6 +43,10 @@ public class RegisterFragment extends Fragment {
             if (TextUtils.isEmpty(name) || TextUtils.isEmpty(surname) || 
                 TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
                 Toast.makeText(getContext(), getString(R.string.toast_empty_fields), Toast.LENGTH_SHORT).show();
+            } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                Toast.makeText(getContext(), "Formato de correo electrónico inválido", Toast.LENGTH_SHORT).show();
+            } else if (password.length() < 6) {
+                Toast.makeText(getContext(), "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show();
             } else {
                 ((MainActivity) requireActivity()).navigateToMain();
             }
